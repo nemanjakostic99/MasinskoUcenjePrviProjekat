@@ -9,6 +9,7 @@ from sklearn.model_selection import KFold, cross_val_score
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestClassifier
 
 
 
@@ -66,13 +67,14 @@ print(dummy.score(features_test, target_test))
 # Create standardizer
 standardizer = StandardScaler()
 # Create logistic regression object
-logit = LogisticRegression()
+# Create Random Forest Classifier object
+rf_classifier = RandomForestClassifier()
 # Create a pipeline that standardizes, then runs logistic regression
-pipeline = make_pipeline(standardizer, logit)
+pipeline = make_pipeline(standardizer, rf_classifier)
 
 kf = KFold(n_splits=10, shuffle=True, random_state=1)
 # Conduct k-fold cross-validation
-cv_results = cross_val_score(
+kf_rfc_cv_results = cross_val_score(
     pipeline, # Pipeline
     features, # Feature matrix
     target, # Target vector
@@ -80,12 +82,22 @@ cv_results = cross_val_score(
     scoring="accuracy", # Loss function
     n_jobs=-1) # Use all CPU scores
 
-kf = StratifiedKFold(n_splits=10, shuffle=True, random_state=1)
+print("Random Forest Classifier Cross-Validation Mean Accuracy:", kf_rfc_cv_results.mean())
+
+skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=1)
 # Conduct k-fold cross-validation
-cv_results = cross_val_score(
+skf_rfc_cv_results = cross_val_score(
     pipeline, # Pipeline
     features, # Feature matrix
     target, # Target vector
     cv=kf, # Cross-validation technique
     scoring="accuracy", # Loss function
     n_jobs=-1) # Use all CPU scores
+
+print("Random Forest Classifier Stratified Cross-Validation Mean Accuracy:", skf_rfc_cv_results.mean())
+
+classifier = RandomForestClassifier()
+# Train model
+classifier.fit(features_train, target_train)
+# Get accuracy score
+print("Train Test Split Random Forest Classifier", classifier.score(features_test, target_test))
