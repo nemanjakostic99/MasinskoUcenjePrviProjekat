@@ -10,6 +10,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 
 
 
@@ -64,6 +67,8 @@ dummy.fit(features_train, target_train)
 print("Basic train test split, dummy classifier")
 print(dummy.score(features_test, target_test))
 
+# RANDOM FOREST cLASSIFIER
+
 # Create standardizer
 standardizer = StandardScaler()
 # Create logistic regression object
@@ -90,14 +95,155 @@ skf_rfc_cv_results = cross_val_score(
     pipeline, # Pipeline
     features, # Feature matrix
     target, # Target vector
-    cv=kf, # Cross-validation technique
+    cv=skf, # Cross-validation technique
     scoring="accuracy", # Loss function
     n_jobs=-1) # Use all CPU scores
 
 print("Random Forest Classifier Stratified Cross-Validation Mean Accuracy:", skf_rfc_cv_results.mean())
 
-classifier = RandomForestClassifier()
+rf_classifier_basicSplit = RandomForestClassifier()
 # Train model
-classifier.fit(features_train, target_train)
+rf_classifier_basicSplit.fit(features_train, target_train)
 # Get accuracy score
-print("Train Test Split Random Forest Classifier", classifier.score(features_test, target_test))
+print("Train Test Split Random Forest Classifier", rf_classifier_basicSplit.score(features_test, target_test))
+
+# NAIVE BAYES
+
+# Create Naive Bayes classifier object
+nb_classifier = GaussianNB()
+
+# Create a pipeline that standardizes, then runs Naive Bayes
+pipeline_nb = make_pipeline(standardizer, nb_classifier)
+
+# Use K-Fold cross-validation
+kf_nb_cv_results = cross_val_score(
+    pipeline_nb,  # Pipeline
+    features,     # Feature matrix
+    target,       # Target vector
+    cv=kf,        # Cross-validation technique
+    scoring="accuracy",  # Loss function
+    n_jobs=-1     # Use all CPU cores
+)
+print("Naive Bayes Cross-Validation Mean Accuracy:", kf_nb_cv_results.mean())
+
+skf_nb_cv_results = cross_val_score(
+    pipeline_nb,  # Pipeline
+    features,     # Feature matrix
+    target,       # Target vector
+    cv=skf,        # Cross-validation technique
+    scoring="accuracy",  # Loss function
+    n_jobs=-1     # Use all CPU cores
+)
+print("Naive Bayes Stratified Cross-Validation Mean Accuracy:", skf_nb_cv_results.mean())
+
+nb_classifier_basicSplit = GaussianNB()
+# Train model
+nb_classifier_basicSplit.fit(features_train, target_train)
+# Get accuracy score
+print("Train Test Split Naive Bayes", nb_classifier_basicSplit.score(features_test, target_test))
+
+# K-Nearest Neighbors
+
+# Create K-Nearest Neighbors classifier object
+knn_classifier = KNeighborsClassifier()
+
+# Create a pipeline that standardizes, then runs KNN
+pipeline_knn = make_pipeline(standardizer, knn_classifier)
+
+# Use K-Fold cross-validation
+kf_knn_cv_results = cross_val_score(
+    pipeline_knn,  # Pipeline
+    features,      # Feature matrix
+    target,        # Target vector
+    cv=kf,         # Cross-validation technique
+    scoring="accuracy",   # Loss function
+    n_jobs=-1      # Use all CPU cores
+)
+print("K-Nearest Neighbors Cross-Validation Mean Accuracy:", kf_knn_cv_results.mean())
+
+skf_knn_cv_results = cross_val_score(
+    pipeline_knn,  # Pipeline
+    features,      # Feature matrix
+    target,        # Target vector
+    cv=skf,         # Cross-validation technique
+    scoring="accuracy",   # Loss function
+    n_jobs=-1      # Use all CPU cores
+)
+print("K-Nearest Neighbors Stratified Cross-Validation Mean Accuracy:", skf_knn_cv_results.mean())
+
+knn_classifier_basicSplit = KNeighborsClassifier()
+# Train model
+knn_classifier_basicSplit.fit(features_train, target_train)
+# Get accuracy score
+print("Train Test Split K-Nearest Neighbors", knn_classifier_basicSplit.score(features_test, target_test))
+
+
+# GRADIENT BOOSTING
+
+# Create Gradient Boosting classifier object
+gb_classifier = GradientBoostingClassifier()
+
+# Create a pipeline that standardizes, then runs Gradient Boosting
+pipeline_gb = make_pipeline(standardizer, gb_classifier)
+
+# Use K-Fold cross-validation
+kf_gb_cv_results = cross_val_score(
+    pipeline_gb,   # Pipeline
+    features,      # Feature matrix
+    target,        # Target vector
+    cv=kf,         # Cross-validation technique
+    scoring="accuracy",   # Loss function
+    n_jobs=-1      # Use all CPU cores
+)
+print("Gradient Boosting Cross-Validation Mean Accuracy:", kf_gb_cv_results.mean())
+
+skf_gb_cv_results = cross_val_score(
+    pipeline_gb,   # Pipeline
+    features,      # Feature matrix
+    target,        # Target vector
+    cv=skf,         # Cross-validation technique
+    scoring="accuracy",   # Loss function
+    n_jobs=-1      # Use all CPU cores
+)
+print("Gradient Boosting Stratified Cross-Validation Mean Accuracy:", skf_gb_cv_results.mean())
+
+gb_classifier_basicSplit = KNeighborsClassifier()
+# Train model
+gb_classifier_basicSplit.fit(features_train, target_train)
+# Get accuracy score
+print("Train Test Split Gradient Boosting", gb_classifier_basicSplit.score(features_test, target_test))
+
+# LOGISTIC REGRESSION
+
+# Create Logistic Regression classifier object
+log_reg_classifier = LogisticRegression()
+
+# Create a pipeline that standardizes, then runs Logistic Regression
+pipeline_log_reg = make_pipeline(standardizer, log_reg_classifier)
+
+# Use K-Fold cross-validation
+kf_log_reg_cv_results = cross_val_score(
+    pipeline_log_reg,  # Pipeline
+    features,          # Feature matrix
+    target,            # Target vector
+    cv=kf,             # Cross-validation technique
+    scoring="accuracy",   # Loss function
+    n_jobs=-1          # Use all CPU cores
+)
+print("Logistic Regression Cross-Validation Mean Accuracy:", kf_log_reg_cv_results.mean())
+
+skf_log_reg_cv_results = cross_val_score(
+    pipeline_log_reg,  # Pipeline
+    features,          # Feature matrix
+    target,            # Target vector
+    cv=skf,             # Cross-validation technique
+    scoring="accuracy",   # Loss function
+    n_jobs=-1          # Use all CPU cores
+)
+print("Logistic Regression Stratified Cross-Validation Mean Accuracy:", skf_log_reg_cv_results.mean())
+
+log_reg__basicSplit = KNeighborsClassifier()
+# Train model
+log_reg__basicSplit.fit(features_train, target_train)
+# Get accuracy score
+print("Train Test Split Logistic Regression", log_reg__basicSplit.score(features_test, target_test))
