@@ -50,7 +50,7 @@ dataframe = dataframe[~outliers_indices]
 # View first two rows
 #print(dataframe.head(20))
 
-features, target = dataframe[['Category', 'Age', 'ALB', 'ALP', 'ALB', 'ALT', 'AST', 'BIL', 'CHE', 'CHOL', 'CREA', 'GGT', 'PROT']], dataframe['Category']
+features, target = dataframe[['Age', 'ALB', 'ALP', 'ALB', 'ALT', 'AST', 'BIL', 'CHE', 'CHOL', 'CREA', 'GGT', 'PROT']], dataframe['Category']
 
 # Split into training and test set
 features_train, features_test, target_train, target_test = train_test_split(
